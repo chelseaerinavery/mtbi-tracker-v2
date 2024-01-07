@@ -6,12 +6,28 @@ module.exports = function (passport) {
     passport.use(new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: "http://www.example.com/auth/google/callback"
+        callbackURL: "/auth/google/callback"
     },
-        function (accessToken, refreshToken, profile, cb) {
-            User.findOrCreate({ googleId: profile.id }, function (err, user) {
-                return cb(err, user);
-            });
+        async (accessToken, refreshToken, profile, cb) => {
+            const newUser = {
+                googleId: profile.id,
+                displayName: profile.displayName,
+                firstName: profile.name.givenName,
+                lastName: profile.name.familyName,
+                image: profile.photos[0]
+            }
+
+            try {
+                let user = await User.findOne({ googleId: profile.id })
+                if (user) {
+                    cb(null, user)
+                } else {
+                    user = await User.create(newUser)
+                    cb(null, user)
+                }
+            } catch (err) {
+                console.error(object)
+            }
         }
     ));
 
