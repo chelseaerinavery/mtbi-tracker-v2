@@ -14,7 +14,7 @@ module.exports = function (passport) {
                 displayName: profile.displayName,
                 firstName: profile.name.givenName,
                 lastName: profile.name.familyName,
-                image: profile.photos[0]
+                image: profile.photos[0].value
             }
 
             try {
@@ -26,7 +26,7 @@ module.exports = function (passport) {
                     cb(null, user)
                 }
             } catch (err) {
-                console.error(object)
+                console.error(err)
             }
         }
     ));
