@@ -13,8 +13,9 @@ router.get('/', ensureGuest, (req, res) => {
 // @desc Dashboard
 // @route GET / 
 router.get('/dashboard', ensureAuth, (req, res) => {
+    // console.log(req, "REQ IS💌💌 ")
     res.render('dashboard', {
-        name: req.user.firstName
+        name: req.user.firstName,
     })
 })
 

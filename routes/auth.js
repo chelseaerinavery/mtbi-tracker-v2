@@ -9,9 +9,10 @@ router.get('/google',
 
 // @desc Google auth callback
 // @route GET /auth/google/callback
-router.get('/google/callback',
-    passport.authenticate('google', { failureRedirect: '/' }),
-    function (req, res) {
+router.get(
+    '/google/callback',
+    passport.authenticate('google', { failureRedirect: '/login' }),
+    (req, res) => {
         // Successful authentication, redirect home.
         res.redirect('/dashboard');
     });
@@ -19,11 +20,8 @@ router.get('/google/callback',
 // @desc Logout user
 // @route /auth/logout
 router.get("/logout", function (req, res, next) {
-    req.logout(function (err) {
-        if (err) {
-            return next(err);
-        }
-        res.redirect("/");
+    req.logout((err) => {
+        return err ? next(err) : res.redirect("/")
     });
 });
 
